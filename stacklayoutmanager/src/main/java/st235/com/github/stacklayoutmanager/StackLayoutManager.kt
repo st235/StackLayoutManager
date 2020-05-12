@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView.Recycler
 import kotlin.math.min
 
 class StackLayoutManager(
-    val visibleItemsCount: Int = MAX_VISIBLE_ITEMS,
+    private val visibleItemsCount: Int = DEFAULT_VISIBLE_ITEMS_COUNT,
     internal val stackItemDownScale: Float = 0.1F
 ): RecyclerView.LayoutManager() {
 
@@ -54,8 +54,8 @@ class StackLayoutManager(
     ) {
         super.onItemsAdded(recyclerView, positionStart, itemCount)
 
-        if (getItemCount() < visibleItemsCount && endListener != null) {
-            endListener!!.onNeedMoreItems()
+        if (getItemCount() < visibleItemsCount) {
+            endListener?.onNeedMoreItems()
         }
     }
 
@@ -67,11 +67,11 @@ class StackLayoutManager(
 
         rewindHead()
         val childCount = getItemCount()
-        if (childCount == visibleItemsCount && endListener != null) {
-            endListener!!.onNeedMoreItems()
+        if (childCount == visibleItemsCount) {
+            endListener?.onNeedMoreItems()
         }
-        if (childCount == 0 && endListener != null) {
-            endListener!!.onEmpty()
+        if (childCount == 0) {
+            endListener?.onEmpty()
         }
     }
 
@@ -87,6 +87,6 @@ class StackLayoutManager(
     }
 
     private companion object {
-        const val MAX_VISIBLE_ITEMS = 2
+        const val DEFAULT_VISIBLE_ITEMS_COUNT = 2
     }
 }

@@ -1,9 +1,6 @@
 package st235.com.github.stacklayoutmanager
 
 import android.graphics.Canvas
-import androidx.annotation.FloatRange
-import androidx.appcompat.widget.ViewUtils
-import androidx.core.math.MathUtils
 import androidx.core.math.MathUtils.clamp
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -11,13 +8,21 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import st235.com.github.stacklayoutmanager.StackItemTouchHelperCallback.Direction.Companion.toDirection
 import kotlin.math.abs
 
-class StackItemTouchHelperCallback(
-    private val orientation: Orientation = Orientation.HORIZONTAL,
-    private val rotationThreshold: Float = 0F,
-    @FloatRange(from = 0.0, to = 1.0) private val scaleDownThreshold: Float = 1F
+abstract class StackItemTouchHelperCallback(
+    private val orientation: Orientation = Orientation.HORIZONTAL
 ) : ItemTouchHelper.Callback() {
 
-    var onSwipeListener: OnSwipeListener? = null
+    abstract fun onSwiped(
+        viewHolder: ViewHolder?,
+        position: Int,
+        direction: Direction
+    )
+
+    abstract fun onSwiping(
+        viewHolder: ViewHolder?,
+        progress: Float,
+        direction: Direction
+    )
 
     override fun onMove(
         recyclerView: RecyclerView,
@@ -40,7 +45,7 @@ class StackItemTouchHelperCallback(
 
     override fun onSwiped(viewHolder: ViewHolder, rawDirection: Int) {
         viewHolder.itemView.setOnTouchListener(null)
-        onSwipeListener?.onSwiped(viewHolder, viewHolder.adapterPosition, rawDirection.toDirection())
+        onSwiped(viewHolder, viewHolder.adapterPosition, rawDirection.toDirection())
     }
 
     override fun onChildDraw(
@@ -61,11 +66,7 @@ class StackItemTouchHelperCallback(
             return
         }
 
-        val topStackItem = viewHolder.itemView
-        val ratio = clamp(dX / getThreshold(recyclerView, viewHolder), -1f, 1f)
-        topStackItem.rotation = ratio * rotationThreshold
-
-        topStackItem.scale(scaleDownThreshold + (1 - abs(ratio)) * (1 - scaleDownThreshold))
+        val ratio = clamp(dX / recyclerView.getDxThreshold(viewHolder), -1f, 1f)
 
         val childCount = recyclerView.childCount
         for (position in 0 until childCount - 1) {
@@ -74,7 +75,7 @@ class StackItemTouchHelperCallback(
             view.scale(1 - index * layoutManager.stackItemDownScale + abs(ratio) * layoutManager.stackItemDownScale)
         }
 
-        onSwipeListener?.onSwiping(viewHolder, ratio, getDirection(ratio))
+        onSwiping(viewHolder, ratio, getDirection(ratio))
     }
 
     override fun clearView(
@@ -94,11 +95,12 @@ class StackItemTouchHelperCallback(
         }
     }
 
-    private fun getThreshold(
-        recyclerView: RecyclerView,
-        viewHolder: ViewHolder
-    ): Float {
-        return recyclerView.width * getSwipeThreshold(viewHolder)
+    private fun RecyclerView.getDyThreshold(viewHolder: ViewHolder): Float {
+        return height * getSwipeThreshold(viewHolder)
+    }
+
+    private fun RecyclerView.getDxThreshold(viewHolder: ViewHolder): Float {
+        return width * getSwipeThreshold(viewHolder)
     }
 
     enum class Orientation(
@@ -120,19 +122,5 @@ class StackItemTouchHelperCallback(
                 else -> NONE
             }
         }
-    }
-
-    interface OnSwipeListener {
-        fun onSwiped(
-            viewHolder: ViewHolder?,
-            item: Int,
-            direction: Direction
-        )
-
-        fun onSwiping(
-            viewHolder: ViewHolder?,
-            ratio: Float,
-            direction: Direction
-        )
     }
 }
