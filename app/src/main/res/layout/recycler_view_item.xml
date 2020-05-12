@@ -28,7 +28,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_margin="32dp"
-            app:srcCompat="@drawable/baseline_thumb_down_24" />
+            app:srcCompat="@drawable/baseline_thumb_down_24"
+            tools:ignore="VectorDrawableCompat" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/like"
@@ -40,7 +41,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_margin="32dp"
-            app:srcCompat="@drawable/baseline_favorite_24" />
+            app:srcCompat="@drawable/baseline_favorite_24"
+            tools:ignore="VectorDrawableCompat" />
 
         <TextView
             android:id="@+id/emojiView"
