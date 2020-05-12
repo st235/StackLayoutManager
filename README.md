@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/st235/StackLayoutManager/master/images/usage.gif" width="312" height="560">
+<img src="https://raw.githubusercontent.com/st235/StackLayoutManager/master/images/usage.gif" width="325" height="560">
 
 # StackLayoutManager
 [ ![Download](https://api.bintray.com/packages/st235/maven/stacklayoutmanager/images/download.svg) ](https://bintray.com/st235/maven/stacklayoutmanager/_latestVersion)
