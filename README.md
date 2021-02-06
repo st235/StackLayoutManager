@@ -1,9 +1,23 @@
 <img src="https://raw.githubusercontent.com/st235/StackLayoutManager/master/images/usage.gif" width="325" height="560">
 
 # StackLayoutManager
-[ ![Download](https://api.bintray.com/packages/st235/maven/stacklayoutmanager/images/download.svg) ](https://bintray.com/st235/maven/stacklayoutmanager/_latestVersion)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.st235/stacklayoutmanager/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.st235/stacklayoutmanager)
 
 ## Download it from
+
+__Important: library was migrated from JCenter to MavenCentral__ 
+
+It means that it may be necessary to add __mavenCentral__ repository to your repositories list
+
+```groovy
+allprojects {
+    repositories {
+        // your repositories
+
+        mavenCentral()
+    }
+}
+```
 
 - Maven
 
